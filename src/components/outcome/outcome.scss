@@ -1,0 +1,10 @@
+.outcome {
+  font-size: 2rem;
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+
+  &__score {
+    font-size: 2.5rem;
+  }
+}
