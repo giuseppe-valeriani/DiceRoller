@@ -4,6 +4,10 @@ function Roll(sides) {
 
 function DoubleRoll(mod) {
   let firstRoll = Roll(20);
+
+  if (mod === "straight") {
+    return firstRoll;
+  }
   let secondRoll = Roll(20);
 
   if (mod === "disadvantage") {

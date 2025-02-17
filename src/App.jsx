@@ -16,7 +16,6 @@ function App() {
   function normalRoll() {
     let outcome = 0;
     for (let i = 0; i < quantity; i++) {
-      console.log("click");
       let partial = Roll(sides);
       outcome += partial;
     }
@@ -25,6 +24,12 @@ function App() {
 
   function twentyRoll() {
     let outcome = DoubleRoll(mod);
+    setResult(outcome);
+  }
+
+  function hundredRoll() {
+    setQuantity(1);
+    let outcome = Roll(100);
     setResult(outcome);
   }
 
@@ -49,8 +54,10 @@ function App() {
           {sides === 12 && (
             <NumberDice quantity={quantity} setQuantity={setQuantity} />
           )}
-          {sides === 20 && <Twenty mod={mod} setMod={setMod} />}
-          {sides === 100 && <NumberDice quantity={quantity} />}
+          {sides === 20 && (
+            <Twenty mod={mod} setMod={setMod} setQuantity={setQuantity} />
+          )}
+          {/* {sides === 100 && <NumberDice sides={100} />} */}
         </article>
       </section>
       <section className="rolling-section arranging">
@@ -59,12 +66,8 @@ function App() {
         {sides === 8 && <Launcher roll={normalRoll} />}
         {sides === 10 && <Launcher roll={normalRoll} />}
         {sides === 12 && <Launcher roll={normalRoll} />}
-        {sides === 20 && mod === "straight" && <Launcher roll={normalRoll} />}
-        {sides === 20 && mod === "advantage" && <Launcher roll={twentyRoll} />}
-        {sides === 20 && mod === "disadvantage" && (
-          <Launcher roll={twentyRoll} />
-        )}
-        {sides === 100 && <Launcher roll={normalRoll} />}
+        {sides === 20 && <Launcher roll={twentyRoll} />}
+        {sides === 100 && <Launcher roll={hundredRoll} />}
         <Outcome result={result} />
       </section>
     </main>
