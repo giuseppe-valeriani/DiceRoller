@@ -31,3 +31,10 @@ header {
   align-items: center;
   padding: 1rem;
 }
+
+.outcome {
+  padding: 1rem 0;
+  display: flex;
+  flex-direction: column-reverse;
+  justify-content: space-evenly;
+}

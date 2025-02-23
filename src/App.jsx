@@ -1,10 +1,13 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Roll, DoubleRoll } from "./utils/rolling";
+import axios from "axios";
+
 import SelectionDie from "./components/selectionDie/SelectionDie";
 import Twenty from "./components/twenty/Twenty";
 import NumberDice from "./components/numberDice/NumberDice";
 import Launcher from "./components/launcher/Launcher";
 import Outcome from "./components/outcome/Outcome";
+import LastRoll from "./components/lastRoll/LastRoll";
 import "./app.scss";
 
 function App() {
@@ -12,6 +15,8 @@ function App() {
   const [quantity, setQuantity] = useState(1);
   const [mod, setMod] = useState("straight");
   const [result, setResult] = useState();
+  const [lastRollValue, setLastRollValue] = useState({});
+  const url = "http://localhost:8080";
 
   function normalRoll() {
     let outcome = 0;
@@ -32,6 +37,25 @@ function App() {
     let outcome = Roll(100);
     setResult(outcome);
   }
+
+  async function getLastRoll() {
+    try {
+      let response = await axios.get(url);
+      let records = response.data;
+      let lastSides = records[records.length - 1].sides;
+      let lastValue = records[records.length - 1].value;
+      setLastRollValue({
+        sides: lastSides,
+        value: lastValue,
+      });
+    } catch (err) {
+      console.log(err.message);
+    }
+  }
+
+  useEffect(() => {
+    getLastRoll();
+  }, [result]);
 
   return (
     <main>
@@ -57,7 +81,6 @@ function App() {
           {sides === 20 && (
             <Twenty mod={mod} setMod={setMod} setQuantity={setQuantity} />
           )}
-          {/* {sides === 100 && <NumberDice sides={100} />} */}
         </article>
       </section>
       <section className="rolling-section arranging">
@@ -68,7 +91,10 @@ function App() {
         {sides === 12 && <Launcher roll={normalRoll} />}
         {sides === 20 && <Launcher roll={twentyRoll} />}
         {sides === 100 && <Launcher roll={hundredRoll} />}
+      </section>
+      <section className="outcome">
         <Outcome result={result} />
+        <LastRoll lastRollValue={lastRollValue} />
       </section>
     </main>
   );
